@@ -47,4 +47,4 @@ This software is released under a dual license scheme. Users may use it under GP
 Please contact contact[at]hachi-x.com (replace [at] with @) if you are interested in obtaining a commercial licence for distributing your derivative works without disclosing any source code.
 
 # The team
-LEDGO is currently maintained by [Trung Pham](https://github.com/Trungmaster5), [Hao Nguyen](https://github.com/duchaohachix), and [Duc LT](https://github.com/duclt1298) from HachiX Corporation. 
+LEDGO is currently maintained by [Trung Pham](https://github.com/Trungmaster5), [Hao Nguyen](https://github.com/duchaohachix), and [Duc LT](https://github.com/duclt1298) from HachiX Corporation. Give this project a star if you think it is useful for you. Appreciate it! 
