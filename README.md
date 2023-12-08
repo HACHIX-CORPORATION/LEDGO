@@ -8,7 +8,8 @@ The output is a bitmap file that can be converted into C++ array using [bitmap_c
 - Whole project save/load (including layout settings for later use)
 - Unwanted text border-line removal
 - Canvas size changing
-- Supports Japanese (default) and English 
+- Supports Japanese (default) and English
+- Full text editing
 
 ## Tutorial
 Basic operations are provided as GIF in `/tutorials`.
