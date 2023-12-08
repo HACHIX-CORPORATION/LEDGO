@@ -45,3 +45,6 @@ We are very interested in incorporating relevant and meaningful improvements and
 # LICENSE
 This software is released under a dual license scheme. Users may use it under GPLv3(see LICENSE.md) or obtain a commercial license. 
 Please contact contact[at]hachi-x.com (replace [at] with @) if you are interested in obtaining a commercial licence for distributing your derivative works without disclosing any source code.
+
+# The team
+LEDGO is currently maintained by [Trung Pham](https://github.com/Trungmaster5), [Hao Nguyen](https://github.com/duchaohachix), and [Duc LT](https://github.com/duclt1298) from HachiX Corporation. 
