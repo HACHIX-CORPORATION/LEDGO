@@ -1,0 +1,139 @@
+/* Button Styles */
+#ClearButton {
+    background-color: white; 
+    color: black; 
+    border: 1px solid black;
+    border-radius: 1px;min-width: 100px;
+    min-height: 32px;
+}
+
+#SaveProjectButton, #LoadProjectButton, #GenerateBMPButton {
+    background-color: #3366cc; 
+    color: white; 
+    border: 1px solid black; 
+    border-radius: 1px;
+    min-width: 150px;
+    min-height: 32px;
+}
+
+#WidgetSizeButton {
+    background-color: white; 
+    color: black; 
+    border: 1px solid black; 
+    border-radius: 5px;
+    min-width: 100px;
+    min-height: 32px;
+    margin-left: 10px;
+}
+
+#CustomColorButton {
+    background-color: white; 
+    border-radius: 5px;
+    border: 1px solid black;  
+    color: gray;
+}
+
+/* Widget Styles */
+#FunctionsWidget, #LayersWidget, #PreviewWidget {
+    border: 1px solid gray;
+
+}
+
+CheckBox {
+    border: none;
+}
+
+/* Instructions Label , Version Label */
+#InstructionsLabel, #VersionLabel {
+    font-size: 12px;
+    color: #666666;
+}
+
+
+/* ComboBox Styles */
+#BorderStyleCombo {
+    border-radius: 5px;
+    border: 1px solid black;
+    height: 30px;
+    line-height: 40px;
+    font-size: 16px;
+}
+
+/* Slider Styles */
+#WhiteSquare {
+    background-color: #f0f0f0; 
+    border:1px solid black
+}
+
+#BlackSquare {
+    background-color: #4A4A4A;
+    border:1px solid black
+}
+
+/* Grid border checkbox Styles */
+#GridBorderCheckbox::indicator {
+    width : 24px;
+    height : 24px;
+    background-color: white;
+    border-radius: 1px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+    margin-left:10px;
+}
+
+#GridBorderCheckbox::indicator:checked {
+    background-image : url(icons/icons8-checked-24.png);
+    width : 24px;
+    height : 24px;
+}
+#ViewIconCheckbox::indicator{
+    width : 24px;
+    height : 24px;
+    background-color: white;
+    background-image : url(icons/icons8-eye-no-view.png);
+}
+
+#ViewIconCheckbox::indicator:checked{
+    width : 24px;
+    height : 24px;
+    background-color: white;
+    background-image : url(icons/icons8-eye-view.png);
+}
+
+#PlayGifCheckbox::indicator{
+    width : 24px;
+    height : 24px;
+    background-color: white;
+    background-image : url(icons/icons8-play-24.png);
+}
+
+#PlayGifCheckbox::indicator:checked{
+    width : 24px;
+    height : 24px;
+    background-color: white;
+    background-image : url(icons/icons8-pause-24.png);
+}
+
+#EraserButton{
+    max-width : 24px;
+    max-height : 24px;
+    border: none;
+    background-color: white;
+    background-image : url(icons/icons8-eraser-24.png);
+}
+
+#MoveDownButton{
+    max-width : 24px;
+    max-height : 24px;
+    border: none;
+    background-color: white;
+    background-image : url(icons/icons8-expand-arrow-24.png);
+}
+#MoveUpButton{
+    max-width : 24px;
+    max-height : 24px;
+    border: none;
+    background-color: white;
+    background-image : url(icons/icons8-collapse-arrow-24.png);
+}

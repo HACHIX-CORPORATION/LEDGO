@@ -1,0 +1,215 @@
+{
+    "label":{
+    "instructions_label": {
+        "eng": "*Click on the dot again to turn it OFF",
+        "jap": "※もう一度ドットをクリックしてオフにしてください"
+    },
+    "version_label": {
+        "eng": "Version 3.0.0",
+        "jap": "バージョン 3.0.0"
+    },
+    "layer_widget.add_layer_text":{
+        "eng": "Add Layer",
+        "jap": "レイヤー追加"
+    },
+    "layer_widget.delete_layer_text":{
+        "eng": "Delete Layer",
+        "jap": "レイヤー削除"
+    },
+    "layer_widget.label_select_all":{
+        "eng": "Select all",
+        "jap": "すべて選択"
+    },
+
+
+    "footbar_widget.save_project_button":{
+        "eng": "Save Project",
+        "jap": "プロジェクト保存"
+    },
+    "footbar_widget.load_project_button":{
+        "eng": "Load Project",
+        "jap": "プロジェクト読み込む"
+    },
+    "footbar_widget.generate_bmp_button":{
+        "eng": "Generate BMP",
+        "jap": "BMP生成"
+    },
+    "topbar_widget.custom_color_button":{
+        "eng": "Custom Color",
+        "jap": "カスタムカラー"
+    },
+    "topbar_widget.grid_color_text":{
+        "eng": "Grid Color",
+        "jap": "グリッドカラー"
+    },
+    "topbar_widget.grid_border_text":{
+        "eng": "Grid Border",
+        "jap": "グリッド境界線"
+    },
+    "topbar_widget.select_color_label":{
+        "eng": "Select Color",
+        "jap": "色選択"
+    },
+    "topbar_widget.widgetSizeButton":{
+        "eng": "Change size",
+        "jap": "サイズ変更"
+    }
+
+},
+"message":{
+    "Close":{
+        "eng": "Close",
+        "jap": "閉じる"
+    },
+    "save_project_question":{
+        "eng": "Do you want to save this project?",
+        "jap": "このプロジェクトを保存しますか"
+    },
+    "Project_Saved":{
+        "eng": "Project Saved",
+        "jap": "プロジェクトが保存されました."
+    },
+    "done_save_project":{
+        "eng": "Done save project to ",
+        "jap": "プロジェクトを保存しました"
+    },
+    "Error":{
+        "eng": "Error",
+        "jap": "エラー"
+    },
+    "Import_BMP_error":{
+        "eng": "File dimensions must be {0} or smaller.",
+        "jap": "ファイルの寸法は{0}以下でなければなりません."
+    },
+    "Import_BMP_fail":{
+        "eng": "Failed to load BMP file",
+        "jap": "BMPファイルの読み込みに失敗しました."
+    },
+    "Warning":{
+        "eng": "Warning",
+        "jap": "警告"
+    },
+    "Off_view":{
+        "eng": "Cannot operate because the view of the selected layer is turned off, please turn on the view and reselect tool.",
+        "jap": "選択されたレイヤーのビューがオフになっているため操作できません。ビューをオンにして、ツールを再選択してください."
+    },
+    "Image_resize_too_big":{
+        "eng": "Resize text is too big.",
+        "jap": "テキストのサイズ変更が大きすぎます."
+    },
+    "not_move_out_grid":{
+        "eng": "Can not be move outside grid.",
+        "jap": "グリッドの外に移動することはできません."
+    },
+    "Project_loaded":{
+        "eng": "Project Loaded",
+        "jap": "プロジェクトが読み込まれました."
+    },
+    "Success":{
+        "eng": "Success",
+        "jap": "成功"
+    },
+    "Processing":{
+        "eng": "Processing",
+        "jap": "処理中"
+    },
+    "none_delete_layer":{
+        "eng": "No layer selected for deletion.",
+        "jap": "削除するレイヤーが選択されていません."
+    },
+    "delete_layer":{
+        "eng": "Delete Layer",
+        "jap": "レイヤーの削除"
+    },
+    "delete_layer_question":{
+        "eng": "Are you sure you want to delete this layer?",
+        "jap": "このレイヤーを削除してもよろしいですか?"
+    },
+    "Yes":{
+        "eng": "Yes",
+        "jap": "はい"
+    },
+    "No":{
+        "eng": "No",
+        "jap": "いいえ"
+    },
+    "Cancel":{
+        "eng": "Cancel",
+        "jap": "キャンセル"
+    },
+    "Load Project":{
+        "eng": "Load Project",
+        "jap": "プロジェクト読み込み"
+    },
+    "load_project_text":{
+        "eng": "Do you want to load the previous project?",
+        "jap": "プロジェクトを読み込みますか？"
+    }
+},
+"progress":{
+    "Importing_image":{
+        "eng": "Importing image to layer ...",
+        "jap": "レイヤーに画像をインポートしています…"
+    },
+    "Cancel":{
+        "eng": "Cancel",
+        "jap": "キャンセル"
+    },
+    "Processing_layers":{
+        "eng": "Processing layers...",
+        "jap": "レイヤーを処理中..."
+    },
+    "Abort":{
+        "eng": "Abort",
+        "jap": "中止"
+    },
+    "Generating_GIF":{
+        "eng": "Generating GIF frames...",
+        "jap": "GIF フレームを生成する..."
+    },
+    "Generating_BMP":{
+        "eng": "Generating BMP file...",
+        "jap": "BMP ファイルを生成しています..."
+    }
+},
+"input":{
+    "Enter_text":{
+        "eng": "Enter text",
+        "jap": "テキストを入力してください"
+    },
+    "Enter_text_question":{
+        "eng": "Enter the text you want to display:",
+        "jap": "表示したいテキストを入力してください:"
+    },
+    "Text":{
+        "eng": "Text:",
+        "jap": "文章"
+    },
+    "Scale_v":{
+        "eng": "Scale vertically:",
+        "jap": "スケール垂直"
+    },
+    "Scale_h":{
+        "eng": "Scale horizontally:",
+        "jap": "スケール水平"
+    },
+    "Rotation":{
+        "eng": "Rotation (degrees):",
+        "jap": "回転 (度):"
+    },
+    "Font_size":{
+        "eng": "Font size:",
+        "jap": "フォントサイズ"
+    },
+    "width":{
+        "eng": "Width (pixel):",
+        "jap": "幅(ピクセル):"
+    },
+    "height":{
+        "eng": "Height (pixel):",
+        "jap": "長さ(ピクセル):"
+    }
+
+}
+}
+
