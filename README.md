@@ -43,11 +43,11 @@ So far, we recommend the following choices:
 - Python: 3.11 (Anaconda framework if possible)
 
 # Support
-We are very interested in incorporating relevant and meaningful improvements and bug fixes. If you have such, please don't hesiate to contact us or make a pull request. However, due to lack of resources, we may or may not answer to trivial questions in Issues.
+We are very interested in incorporating relevant and meaningful improvements and bug fixes. If you have such, please don't hesiate to contact us or make a pull request. Due to the lack of resources, we may or may not answer to trivial questions in Issues.
 
 # LICENSE
 This software is released under a dual license scheme. Users may use it under GPLv3(see LICENSE.md) or obtain a commercial license. 
-Please contact contact[at]hachi-x.com (replace [at] with @) if you are interested in obtaining a commercial licence for distributing your derivative works without disclosing any source code.
+Please contact `contact[at]hachi-x.com` (replace [at] with @) if you are interested in obtaining a commercial licence for distributing your derivative works without disclosing any source code.
 
 # The team
 LEDGO is currently maintained by [Trung Pham](https://github.com/Trungmaster5), [Hao Nguyen](https://github.com/duchaohachix), and [Duc LT](https://github.com/duclt1298) from HachiX Corporation. Give this project a star if you think it is useful for you. Appreciate it! 
