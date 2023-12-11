@@ -22,7 +22,10 @@ Install LEDGO via pip:
 pip install -r requirements.txt
 pip install pyinstaller #If you want to build .exe later 
 ```
-
+Then run 
+```
+python ledgo.py
+```
 ## Compiling 
 Build LEDGO using pyinstaller as follow:
 ```
