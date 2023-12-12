@@ -1,6 +1,6 @@
 # LEDGO
 
-This software is designed to enable anyone to design the display of LED array. 
+This software is made to enable anyone to design the display of LED array. 
 The output is a bitmap file that can be converted into C++ array using [bitmap_converter](https://en.radzio.dxp.pl/bitmap_converter/). It's also ok if you just want to use LEDGO as a bitmap editor.
 
 ![Screenshot](screenshot.png)
