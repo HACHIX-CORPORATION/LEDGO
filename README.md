@@ -22,12 +22,12 @@ Install LEDGO via pip:
 pip install -r requirements.txt
 pip install pyinstaller #If you want to build .exe later 
 ```
-Then run 
+Then run: 
 ```
 python ledgo.py
 ```
 ## Compiling 
-Build LEDGO using pyinstaller as follow:
+Build LEDGO using pyinstaller as follows:
 ```
 pyinstaller --onedir --windowed --add-data "icons;icons" --add-data "stylesheet/stylesheet.css;stylesheet" ledgo.py
 ```
@@ -43,7 +43,7 @@ So far, we recommend the following choices:
 - Python: 3.11 (Anaconda framework if possible)
 
 # Support
-We are very interested in incorporating relevant and meaningful improvements and bug fixes. If you have such, please don't hesiate to contact us or make a pull request. Due to the lack of resources, we may or may not answer to trivial questions in Issues.
+We are very interested in incorporating relevant and meaningful improvements and bug fixes. If you have such, please don't hesiate to contact us or make a pull request. Due to the lack of resources, we may or may not answer questions in Issues.
 
 # LICENSE
 This software is released under a dual license scheme. Users may use it under GPLv3(see LICENSE.md) or obtain a commercial license. 
