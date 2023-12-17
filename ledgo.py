@@ -8,6 +8,8 @@ import zipfile
 import time 
 import tempfile
 
+from websocket import WebSocketClient
+
 start = time.time()
 
 from PySide6.QtWidgets import QApplication, QLabel, QVBoxLayout, QHBoxLayout, QGraphicsView, QGraphicsScene,\
@@ -818,6 +820,9 @@ if __name__ == "__main__":
     splash = QSplashScreen(pixmap)
     splash.show()
 
+    ws_client = WebSocketClient("ws://your-websocket-server-url")
+    ws_client.connect()
+
     start = time.time()
     from zoomable_graphics_view import ZoomableGraphicsView
     from toolbar_widget import FunctionWidget
@@ -849,4 +854,6 @@ if __name__ == "__main__":
 
 
     # Start the event loop
+    ws_client.disconnect()
     sys.exit(app.exec())
+
