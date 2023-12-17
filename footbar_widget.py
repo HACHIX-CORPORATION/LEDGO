@@ -5,18 +5,24 @@ import numpy as np  # Import NumPy
 import glob
 import zipfile
 from io import BytesIO
-import time 
+import time
 import imageio
 import cv2
 import tempfile
+from PIL import Image
 
-from PySide6.QtWidgets import QApplication, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QGraphicsView, QGraphicsScene,\
- QGraphicsRectItem, QWidget,QProgressDialog, QSizePolicy, QColorDialog,QComboBox, QFileDialog, QMessageBox, QSlider,QCheckBox,QSpacerItem, QSpinBox, QGraphicsProxyWidget
-from PySide6.QtGui import QPen, QBrush, QColor, QImage, QPainter, QFont , QIcon, QPixmap, QMovie
-from PySide6.QtCore import Qt, QEvent, QSize ,Signal, QRectF, QByteArray, QBuffer, QIODevice , QPointF, QThread, QObject, Signal, QMutex
+from PySide6.QtWidgets import QApplication, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QGraphicsView, \
+    QGraphicsScene, \
+    QGraphicsRectItem, QWidget, QProgressDialog, QSizePolicy, QColorDialog, QComboBox, QFileDialog, QMessageBox, \
+    QSlider, QCheckBox, QSpacerItem, QSpinBox, QGraphicsProxyWidget
+from PySide6.QtGui import QPen, QBrush, QColor, QImage, QPainter, QFont, QIcon, QPixmap, QMovie
+from PySide6.QtCore import Qt, QEvent, QSize, Signal, QRectF, QByteArray, QBuffer, QIODevice, QPointF, QThread, QObject, \
+    Signal, QMutex
 
 DEFAULT_VALUE_OF_ITEM = None
 TEMP_DIR = tempfile.TemporaryDirectory()
+
+
 class FootBarWidget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -26,21 +32,26 @@ class FootBarWidget(QWidget):
         self.load_project_button.setObjectName("LoadProjectButton")
         self.generate_bmp_button = QPushButton("Generate BMP")
         self.generate_bmp_button.setObjectName("GenerateBMPButton")
+        self.generate_data_array_button = QPushButton("Generate Array Data")
+        self.generate_data_array_button.setObjectName("GenerateDataArrayButton")
 
         self.save_project_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         self.load_project_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        self.generate_bmp_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed) 
-
+        self.generate_bmp_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        self.generate_data_array_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
 
         button_width = self.save_project_button.sizeHint().width()
         self.save_project_button.setFixedWidth(button_width + button_width // 3)
-        self.load_project_button.setFixedWidth(button_width + button_width // 3)  # Set the fixed width for the Import BMP button
+        self.load_project_button.setFixedWidth(
+            button_width + button_width // 3)  # Set the fixed width for the Import BMP button
         self.generate_bmp_button.setFixedWidth(button_width + button_width // 3)
+        self.generate_data_array_button.setFixedWidth(button_width + button_width // 3)
 
         font = QFont()
         self.save_project_button.setFont(font)
         self.load_project_button.setFont(font)
         self.generate_bmp_button.setFont(font)
+        self.generate_data_array_button.setFont(font)
 
         self.layout = QHBoxLayout()
         self.layout.addStretch(1)
@@ -48,6 +59,7 @@ class FootBarWidget(QWidget):
         self.layout.addWidget(self.save_project_button)
         self.layout.addWidget(self.load_project_button)
         self.layout.addWidget(self.generate_bmp_button)
+        self.layout.addWidget(self.generate_data_array_button)
 
         self.button_w_ratio = 10
         self.button_h_ratio = 20
@@ -55,11 +67,13 @@ class FootBarWidget(QWidget):
         # self.num_row = self.parent.num_row
         self.dot_size = 2
         self.save_project_button.clicked.connect(lambda: self.save_project())
-        #self.clear_button.clicked.connect(self.clear_colors)
+        # self.clear_button.clicked.connect(self.clear_colors)
         self.load_project_button.clicked.connect(lambda: self.load_project())
-        self.generate_bmp_button.clicked.connect(self.generate_bmp)
+        self.generate_bmp_button.clicked.connect(lambda: self.generate_bmp())
+        self.generate_data_array_button.clicked.connect(lambda: self.generate_bmp(True))
+
         self.setLayout(self.layout)
-    
+
     def get_widget(self):
         # Method to get the actual top bar widget
         return self
@@ -80,8 +94,9 @@ class FootBarWidget(QWidget):
         button_width = app_width // self.button_w_ratio  # Adjust the ratio as needed
         button_height = app_height // self.button_h_ratio  # Adjust the ratio as needed
 
-        for button in [self.save_project_button, self.load_project_button, self.generate_bmp_button]:
-            button.setFixedSize(button_width, button_height)
+        for button in [self.save_project_button, self.load_project_button, self.generate_bmp_button,
+                       self.generate_data_array_button]:
+            button.setFixedSize(button_width + 50, button_height)
             font = button.font()
             font.setPointSize(int(button.height() * 0.25))
             button.setFont(font)
@@ -102,14 +117,14 @@ class FootBarWidget(QWidget):
         view_rect = QRectF(center_point.x() - width / 2, center_point.y() - height / 2, width, height)
 
         return view_rect
-    
+
     def prepare_project_data(self):
         layers_data = {}
         selected_layers = [row_layout.itemAt(3).widget().text().split(" :")[0]
-                        for checkbox, row_layout in self.parent().layer_widget.checkbox_to_row.items()
-                        if checkbox.isChecked()]
+                           for checkbox, row_layout in self.parent().layer_widget.checkbox_to_row.items()
+                           if checkbox.isChecked()]
         view_rect = str(self.getZoomedViewRect())
-        print("----------------",view_rect)
+        print("----------------", view_rect)
         for layer_name, layer_value in list(self.parent().layer_widget.layers.items()):
             items = []
             items_text = []
@@ -142,22 +157,23 @@ class FootBarWidget(QWidget):
                     # "selected": (item.rect().x(), item.rect().y()) in selected_squares
                 }
                 items_text.append(item_data)
-     
-            graphic_scene = layer_value.get("graphic_scene", 
-                                                np.full((self.parent().num_col, self.parent().num_row), DEFAULT_VALUE_OF_ITEM))
+
+            graphic_scene = layer_value.get("graphic_scene",
+                                            np.full((self.parent().num_col, self.parent().num_row),
+                                                    DEFAULT_VALUE_OF_ITEM))
             color = layer_value.get("color", "")
             save_gif_path = ""
             if layer_value.get("type_img", "") == "gif":
                 temp_file = f"{time.perf_counter()}.gif"
                 self.prepare_original_gif(layer_value.get("gif"), temp_file)
                 save_gif_path = temp_file
-            
+
             layers_data[layer_name] = {
                 "z_value": layer_value.get("z_index", 0),
                 "text": layer_value.get("text", ""),
                 "font_size": layer_value.get("font_size", 0),
                 "graphic_scene": graphic_scene.tolist() if isinstance(graphic_scene, np.ndarray) else graphic_scene,
-                "layer_type": layer_value.get("layer_type","image"),
+                "layer_type": layer_value.get("layer_type", "image"),
                 "is_checked": layer_name in selected_layers,
                 "color": color.name() if isinstance(color, QColor) else color,
                 "items": items,
@@ -166,19 +182,19 @@ class FootBarWidget(QWidget):
                 "rotate_angle": layer_value.get("rotate_angle", 0),
                 "gif_path": save_gif_path
             }
-        
+
         project_data = {
-            "layers": layers_data, 
+            "layers": layers_data,
             "grid_border": self.parent().topbar_widget.grid_border_checkbox.isChecked(),
             "grid_color": self.parent().topbar_widget.gray_slider.value(),
             "selected_color": self.parent().selected_color.name(),
             "grid_col": self.parent().num_col,
             "grid_row": self.parent().num_row,
             "zoom_factor": self.parent().graphics_view.zoom_factor,
-            "view_rect":view_rect
+            "view_rect": view_rect
         }
         return project_data
-    
+
     def prepare_original_gif(self, gif, file_path):
         """
         Processes each frame of the input gif to adjust its size according to the specified dot size and 
@@ -199,26 +215,28 @@ class FootBarWidget(QWidget):
             # get QImage from gif
             frame_gif = gif.currentImage()
             # Create a QImage with the size and fill it with white color
-            image = QImage(frame_gif.width()/self.dot_size, frame_gif.height()/self.dot_size, QImage.Format_RGB32)
+            image = QImage(frame_gif.width() / self.dot_size, frame_gif.height() / self.dot_size, QImage.Format_RGB32)
             image.fill(Qt.white)
 
             # return original size
-            frame_gif = frame_gif.scaled(frame_gif.size()/self.dot_size)
+            frame_gif = frame_gif.scaled(frame_gif.size() / self.dot_size)
             painter = QPainter(image)
-            painter.drawImage(0,0,frame_gif)
+            painter.drawImage(0, 0, frame_gif)
             painter.end()
             frames.append(image)
         # write gif
-        self.write_gif(frames, gif.nextFrameDelay()/1000, file_path)
+        self.write_gif(frames, gif.nextFrameDelay() / 1000, file_path)
 
-    def save_project(self, project_path = None):
+    def save_project(self, project_path=None):
         """
         Save the current project to a file. This function will prompt the user to choose a save
         location and then save the project data and associated images.
         """
         if project_path is None:
             options = QFileDialog.Options()
-            project_path = QFileDialog.getSaveFileName(self, "Save Project", "", "Project Files (*.proj);;All Files (*)", options=options)[0]
+            project_path = \
+            QFileDialog.getSaveFileName(self, "Save Project", "", "Project Files (*.proj);;All Files (*)",
+                                        options=options)[0]
 
         if not project_path:
             return
@@ -265,16 +283,17 @@ class FootBarWidget(QWidget):
         print("Done save project")
         # QMessageBox.information(self, self.parent().data["message"]["Project_Saved"].get(self.parent().language_code), self.parent().data["message"]["Project_Saved"].get(self.parent().language_code))
 
-
-    def load_project(self, temp_path = None):
-        print("temp :",temp_path)
-        if temp_path == None :
+    def load_project(self, temp_path=None):
+        print("temp :", temp_path)
+        if temp_path == None:
             options = QFileDialog.Options()
-            project_path = QFileDialog.getOpenFileName(self, "Open Project File", "", "Project Files (*.proj);;All Files (*)", options=options)[0]
+            project_path = \
+            QFileDialog.getOpenFileName(self, "Open Project File", "", "Project Files (*.proj);;All Files (*)",
+                                        options=options)[0]
 
             if not project_path:
                 return
-        else :
+        else:
             project_path = temp_path
         # Clear the current project state
         self.parent().layer_widget.clear_layers()
@@ -289,7 +308,7 @@ class FootBarWidget(QWidget):
             view_rect = project_data.get("view_rect", "")
             rect_expression = view_rect.replace("PySide6.QtCore.", "")
             view_rect = eval(rect_expression)
-            print("view_rect:",view_rect)
+            print("view_rect:", view_rect)
             center_point = view_rect.center()
             old_col = self.parent().num_col
             old_row = self.parent().num_row
@@ -299,20 +318,21 @@ class FootBarWidget(QWidget):
                 self.parent().num_col = int(num_col)
                 self.parent().num_row = int(num_row)
                 self.parent().reset_grid(int(num_col), int(num_row))
-            self.parent().topbar_widget.updateSize(int(num_col),int(num_row))
+            self.parent().topbar_widget.updateSize(int(num_col), int(num_row))
 
             graphics_view = self.parent().graphics_view
             scene = self.parent().graphics_view.scene()
 
-            for layer_name, layer_data in dict(sorted(project_data["layers"].items(), key=lambda x: x[1]["z_value"])).items():
+            for layer_name, layer_data in dict(
+                    sorted(project_data["layers"].items(), key=lambda x: x[1]["z_value"])).items():
                 z_value = layer_data.get("z_value", 0)
                 items_text = []
-                
+
                 for item in layer_data.get("items_text", []):
-                    x= item.get("x",0)
-                    y= item.get("y",0)
-                    w = item.get("w",0)
-                    h = item.get("h",0)
+                    x = item.get("x", 0)
+                    y = item.get("y", 0)
+                    w = item.get("w", 0)
+                    h = item.get("h", 0)
                     found_items = scene.items(QRectF(x, y, w, h))
                     for found_item in found_items:
                         if isinstance(found_item, QGraphicsRectItem) and found_item.zValue() == 1:
@@ -321,11 +341,12 @@ class FootBarWidget(QWidget):
 
                 if layer_name != "Layer 0":
                     is_checked = layer_data.get("is_checked", False)
-                    layer_type = layer_data.get("layer_type","image")
+                    layer_type = layer_data.get("layer_type", "image")
                     color = layer_data.get("color", "")
 
                     graphic_scene = np.array(layer_data.get("graphic_scene",
-                                        np.full((self.parent().num_col, self.parent().num_row), DEFAULT_VALUE_OF_ITEM)))
+                                                            np.full((self.parent().num_col, self.parent().num_row),
+                                                                    DEFAULT_VALUE_OF_ITEM)))
                     self.parent().layer_widget.layers[layer_name] = {}
                     self.parent().layer_widget.layers[layer_name]["z_index"] = z_value
                     self.parent().layer_widget.layers[layer_name]["text"] = layer_data.get("text", "")
@@ -347,11 +368,11 @@ class FootBarWidget(QWidget):
                             self.parent().import_gif(temp_file, layer_name)
                             self.parent().layer_widget.layers[layer_name]["type_img"] = "gif"
                         self.parent().layer_widget.add_layer_row(layer_name, z_value, is_checked)
-                        self.parent().layer_widget.layer_counter +=1
+                        self.parent().layer_widget.layer_counter += 1
                     else:
                         self.parent().layer_widget.add_text_layer_row(layer_name, z_value, is_checked)
-                        self.parent().layer_widget.text_layer_counter +=1
-                        self.parent().layer_widget.layer_counter +=1
+                        self.parent().layer_widget.text_layer_counter += 1
+                        self.parent().layer_widget.layer_counter += 1
                         # self.parent().layer_widget.text_layer_z_index -= 1
 
                     # update thumbnail
@@ -368,16 +389,17 @@ class FootBarWidget(QWidget):
             # self.parent().topbar_widget.update_selected_color()
             for label_color in self.parent().topbar_widget.basic_color_labels:
                 color_bg = label_color.palette().color(label_color.backgroundRole()).name()
+
                 if selected_color == color_bg:
                     label_color.setStyleSheet(
-                    f"background-color: {selected_color}; border: 4px solid green; border-radius: 5px;")  # Add rounded corners and border
+                        f"background-color: {selected_color}; border: 4px solid green; border-radius: 5px;")  # Add rounded corners and border
                     label_color.setProperty("selected", True)
                 else:
                     label_color.setStyleSheet(
-                    f"background-color: {color_bg}; border: 1px solid black; border-radius: 5px;")  # Add rounded corners
+                        f"background-color: {color_bg}; border: 1px solid black; border-radius: 5px;")  # Add rounded corners
                     label_color.setProperty("selected", False)
             # draw image
-            self.parent().layer_widget.handle_view_layer_visibility() # update view eyes
+            self.parent().layer_widget.handle_view_layer_visibility()  # update view eyes
             print(f"Current view size items: {len(self.parent().list_item_layer_view)}")
 
             if num_col != old_col or num_row != old_row:
@@ -385,18 +407,17 @@ class FootBarWidget(QWidget):
             else:
                 self.parent().set_layer_visibility()
                 self.parent().layer_widget.update_function_icons_state()
-            graphics_view.scale(zoom_factor,zoom_factor)
+            graphics_view.scale(zoom_factor, zoom_factor)
             graphics_view.centerOn(center_point)
             graphics_view.zoom_factor = zoom_factor
             self.parent().topbar_widget.curent_zoom_factor.setText(f"x{zoom_factor:.2f}")
         print(f"Project '{os.path.basename(project_path)}' loaded successfully")
 
-        
         project_name = os.path.basename(project_path)  # Extract the project name from the directory path
         message = f"Load proj {project_name} done"
         # QMessageBox.information(self, self.parent().data["message"]["Project_loaded"].get(self.parent().language_code), message)
-    
-    def generate_bmp(self):
+
+    def generate_bmp(self, isGenerateC=False):
         # Get the file path and name from the user using QFileDialog
         file_dialog = QFileDialog(self)
         file_dialog.setAcceptMode(QFileDialog.AcceptSave)
@@ -414,8 +435,12 @@ class FootBarWidget(QWidget):
                 items = self.parent().get_matrix_layer()
 
                 # Initialize the progress dialog for GIF frames
-                progress_dialog = QProgressDialog(self.parent().data["progress"]["Generating_GIF"].get(self.parent().language_code), self.parent().data["progress"]["Cancel"].get(self.parent().language_code), 0, self.parent().gif.frameCount(), self)
-                progress_dialog.setWindowTitle(self.parent().data["message"]["Processing"].get(self.parent().language_code))
+                progress_dialog = QProgressDialog(
+                    self.parent().data["progress"]["Generating_GIF"].get(self.parent().language_code),
+                    self.parent().data["progress"]["Cancel"].get(self.parent().language_code), 0,
+                    self.parent().gif.frameCount(), self)
+                progress_dialog.setWindowTitle(
+                    self.parent().data["message"]["Processing"].get(self.parent().language_code))
                 progress_dialog.setWindowModality(Qt.WindowModal)
                 current_progress = 0
                 # loop frame of gif
@@ -428,10 +453,10 @@ class FootBarWidget(QWidget):
                     # get QImage from gif
                     frame_gif = self.parent().gif.currentImage()
                     # return original size
-                    frame_gif = frame_gif.scaled(frame_gif.size()/self.dot_size)
+                    frame_gif = frame_gif.scaled(frame_gif.size() / self.dot_size)
                     # create painter to write frame into image
                     painter = QPainter(image)
-                    painter.drawImage(0,0,frame_gif)
+                    painter.drawImage(0, 0, frame_gif)
                     # loop matrix image from selected layer an write pixel into image
                     if items is not None:
                         for x in range(items.shape[0]):
@@ -445,7 +470,7 @@ class FootBarWidget(QWidget):
                     progress_dialog.setValue(current_progress)
                     QApplication.processEvents()
                 # write gif
-                with imageio.get_writer(file_path, mode="I", duration=self.parent().gif.nextFrameDelay()/1000) as f:
+                with imageio.get_writer(file_path, mode="I", duration=self.parent().gif.nextFrameDelay() / 1000) as f:
                     for frame in frames:
                         # create temp image
                         frame.save("temp.png")
@@ -455,15 +480,20 @@ class FootBarWidget(QWidget):
                         # append into
                         f.append_data(numpy_image)
                 progress_dialog.close()
-                self.write_gif(frames, self.parent().gif.nextFrameDelay()/1000, file_path)
-                QMessageBox.information(self, self.parent().data["message"]["Success"].get(self.parent().language_code), f"GIF file saved at {file_path}")
+                self.write_gif(frames, self.parent().gif.nextFrameDelay() / 1000, file_path, isGenerateC)
+                QMessageBox.information(self, self.parent().data["message"]["Success"].get(self.parent().language_code),
+                                        f"GIF file saved at {file_path}")
             else:
                 image = QImage(self.parent().num_col, self.parent().num_row, QImage.Format_RGB32)
                 image.fill(Qt.white)
                 items = self.parent().get_matrix_layer()
                 if items is not None:
-                    progress_dialog = QProgressDialog(self.parent().data["progress"]["Generating_BMP"].get(self.parent().language_code), self.parent().data["progress"]["Cancel"].get(self.parent().language_code), 0, items.shape[0] * items.shape[1], self)
-                    progress_dialog.setWindowTitle(self.parent().data["message"]["Processing"].get(self.parent().language_code))
+                    progress_dialog = QProgressDialog(
+                        self.parent().data["progress"]["Generating_BMP"].get(self.parent().language_code),
+                        self.parent().data["progress"]["Cancel"].get(self.parent().language_code), 0,
+                        items.shape[0] * items.shape[1], self)
+                    progress_dialog.setWindowTitle(
+                        self.parent().data["message"]["Processing"].get(self.parent().language_code))
                     progress_dialog.setWindowModality(Qt.WindowModal)
                     current_progress = 0
                     for x in range(items.shape[0]):
@@ -478,9 +508,12 @@ class FootBarWidget(QWidget):
 
                 # Save the image as a BMP file
                 image.save(file_path, "BMP")
-                QMessageBox.information(self, self.parent().data["message"]["Success"].get(self.parent().language_code), f"BMP file saved at {file_path}")
-        
-    def write_gif(self, frames, duration, file_path):
+                if isGenerateC:
+                    self.image_to_c_array_32bit(file_path)
+                QMessageBox.information(self, self.parent().data["message"]["Success"].get(self.parent().language_code),
+                                        f"BMP file saved at {file_path}")
+
+    def write_gif(self, frames, duration, file_path, isGenerateC = False):
         """Write gif from fames, duration and file path
 
         Args:
@@ -489,7 +522,7 @@ class FootBarWidget(QWidget):
             file_path (str): path to save
         """
         with imageio.get_writer(file_path, mode="I", duration=duration) as f:
-            temp_file = f"{time.perf_counter()}.png" 
+            temp_file = f"{time.perf_counter()}.png"
             for frame in frames:
                 # create temp image
                 frame.save(temp_file)
@@ -500,3 +533,35 @@ class FootBarWidget(QWidget):
                 f.append_data(numpy_image)
             if len(frames) > 0:
                 os.remove(temp_file)
+        if isGenerateC:
+            self.image_to_c_array_32bit(file_path)
+
+    @staticmethod
+    def image_to_c_array_32bit(image_path):
+        try:
+            print('test image_to_c_array_32bit')
+            # Open the image file
+            img = Image.open(image_path)
+
+
+            # Get pixel data
+            pixel_data = list(img.getdata())
+
+            # Format pixel data into a C-style array with 32-bit hex values
+            c_array = "const uint32_t image[] = {\n"
+            for i in range(0, len(pixel_data), 4):
+                pixels = pixel_data[i:i + 4]
+                hex_value = 0
+                for j, pixel in enumerate(pixels):
+                    r, g, b = pixel[:3]  # Extract RGB values
+                    hex_value |= (r << 16) | (g << 8) | b  # Combine RGB into a 32-bit value
+                c_array += f"0x{hex_value:08X},\n"
+            c_array += "};"
+            path = image_path.split(".")[0] + ".c"
+            with open(path, "w") as output_file:
+                output_file.write(c_array)
+
+        except FileNotFoundError:
+            return "File not found"
+        except Exception as e:
+            return f"Error: {e}"
