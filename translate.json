@@ -34,6 +34,10 @@
         "eng": "Generate BMP",
         "jap": "BMP生成"
     },
+    "footbar_widget.generate_data_array_button":{
+        "eng": "Generate Data Array",
+        "jap": "データ配列の生成"
+    },
     "topbar_widget.custom_color_button":{
         "eng": "Custom Color",
         "jap": "カスタムカラー"

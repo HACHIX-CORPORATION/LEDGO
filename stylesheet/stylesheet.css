@@ -7,7 +7,7 @@
     min-height: 32px;
 }
 
-#SaveProjectButton, #LoadProjectButton, #GenerateBMPButton {
+#SaveProjectButton, #LoadProjectButton, #GenerateBMPButton , #GenerateDataArrayButton {
     background-color: #3366cc; 
     color: white; 
     border: 1px solid black; 
